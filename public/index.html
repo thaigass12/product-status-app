@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เช็คสถานะสินค้า</title>
+  <style>
+    /* CSS พื้นฐานและสไตล์สำหรับการจัดระเบียบ */
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 25px;
+      font-size: 28px;
+    }
+    input[type="text"] {
+      width: calc(100% - 22px);
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 17px;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #statusResult {
+      margin-top: 25px;
+      padding: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      background-color: #f9f9f9;
+      text-align: left;
+      min-height: 60px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .error {
+      color: #d9534f;
+      font-weight: bold;
+      text-align: center;
+    }
+    .success {
+      color: #5cb85c;
+      font-weight: bold;
+    }
+
+    /* สไตล์สำหรับแต่ละรายการ/Card */
+    .item-card {
+        border: 1px solid #cceeff;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        background-color: #f0f8ff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+    .item-card:last-child {
+        margin-bottom: 0;
+    }
+    .item-card img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-right: 20px;
+        flex-shrink: 0;
+        border: 1px solid #eee;
+    }
+    .item-details {
+        flex-grow: 1;
+        text-align: left;
+    }
+    .item-details p {
+        margin: 5px 0;
+        font-size: 15px;
+        display: flex;
+        align-items: baseline;
+    }
+    .item-details p strong {
+        color: #333;
+        display: inline-block;
+        min-width: 120px;
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+    .item-details p span {
+        flex-grow: 1;
+    }
+
+    /* สีสถานะตามค่า (คุณสามารถเพิ่ม CSS Class ตามสถานะที่คุณมีใน Sheet) */
+    .status-highlight.ส่งสำเร็จแล้ว { color: #28a745; font-weight: bold; }
+    .status-highlight.กำลังจัดส่ง { color: #007bff; font-weight: bold; }
+    .status-highlight.ค้างชำระ { color: #dc3545; font-weight: bold; }
+    .status-highlight.รอการชำระเงิน { color: #ffc107; font-weight: bold; }
+    .status-highlight.ยกเลิก { color: #6c757d; font-weight: bold; }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+        input[type="text"], button {
+            font-size: 15px;
+            padding: 10px;
+        }
+        .container {
+            padding: 20px;
+        }
+        h1 {
+            font-size: 24px;
+        }
+        .item-card {
+            flex-direction: column;
+            align-items: center;
+        }
+        .item-card img {
+            margin-right: 0;
+            margin-bottom: 15px;
+        }
+        .item-details {
+            width: 100%;
+        }
+        .item-details p strong {
+            min-width: 90px;
+        }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>เช็คสถานะสินค้าของคุณ</h1>
+    <input type="text" id="accountName" placeholder="กรอกชื่อบัญชี">
+    <button onclick="checkAccountStatus()">ค้นหา</button>
+    <div id="statusResult">
+      รายการสถานะจะแสดงที่นี่...
+    </div>
+  </div>
+
+  <script>
+    async function checkAccountStatus() {
+      const accountName = document.getElementById('accountName').value;
+      const statusResultDiv = document.getElementById('statusResult');
+      statusResultDiv.innerHTML = '<p style="text-align:center;">กำลังค้นหา...</p>';
+      statusResultDiv.className = '';
+
+      if (!accountName) {
+        statusResultDiv.innerHTML = '<span class="error">กรุณากรอกชื่อบัญชี</span>';
+        return;
+      }
+
+      try {
+        // เรียกใช้ Serverless Function ที่ Vercel ของคุณ
+        const response = await fetch('/api/search', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ accountName: accountName }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.status === 'success' && result.data.length > 0) {
+          let htmlContent = `<p style="text-align: center; font-size: 1.1em; margin-bottom: 20px;"><strong>พบ ${result.data.length} รายการสำหรับชื่อบัญชี "${result.data[0].accountName || accountName}":</strong></p>`;
+
+          result.data.forEach(item => {
+            const imageUrl = item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.productName || 'สินค้า'}">` : '';
+
+            const price = parseFloat(item.price);
+            const outstanding = parseFloat(item.outstanding);
+
+            htmlContent += `
+              <div class="item-card">
+                ${imageUrl}
+                <div class="item-details">
+                  <p><strong>ชื่อบัญชี:</strong> <span>${item.accountName || '-'}</span></p>
+                  <p><strong>ชื่อสินค้า:</strong> <span>${item.productName || '-'}</span></p>
+                  <p><strong>ราคาสินค้า:</strong> <span>${!isNaN(price) ? price.toLocaleString('th-TH') + ' บาท' : item.price || '-'}</span></p>
+                  <p><strong>ค้างชำระ:</strong> <span>${!isNaN(outstanding) ? outstanding.toLocaleString('th-TH') + ' บาท' : item.outstanding || '-'}</span></p>
+                  <p><strong>สถานะ:</strong> <span class="status-highlight ${item.status}">${item.status || '-'}</span></p>
+                  <p><strong>กำหนดส่งจากเว็ป:</strong> <span>${item.deliveryDueDate || '-'}</span></p>
+                  <p><strong>หมายเหตุ:</strong> <span>${item.remarks || '-'}</span></p>
+                </div>
+              </div>
+            `;
+          });
+          statusResultDiv.innerHTML = htmlContent;
+          statusResultDiv.className = 'success';
+        } else {
+          statusResultDiv.innerHTML = `<span class="error">${result.message || 'ไม่พบข้อมูลสำหรับชื่อบัญชีนี้'}</span>`;
+          statusResultDiv.className = 'error';
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        statusResultDiv.innerHTML = '<span class="error">เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่</span>';
+        statusResultDiv.className = 'error';
+      }
+    }
+  </script>
+</body>
+</html>
