@@ -3,10 +3,10 @@
 const { google } = require('googleapis');
 
 
-const SPREADSHEET_ID = process.env.1THeQ3kv4FbgMBDwrfwX5aIfNDieMEsGIdaHKKQ6ywu8; 
+const SPREADSHEET_ID = process.env.GOOGLE_SHEET_ID;1THeQ3kv4FbgMBDwrfwX5aIfNDieMEsGIdaHKKQ6ywu8; 
 const QUERY_SHEET_NAME = 'Query_Results'; 
 const QUERY_INPUT_CELL = 'A2'; // เซลล์ใน QUERY_SHEET_NAME ที่จะใส่ชื่อบัญชี (ต้องตรงกับที่คุณตั้งใน GSheet)
-const QUERY_OUTPUT_RANGE = 'A1:H'; // ช่วงข้อมูลที่คาดว่าจะได้จาก QUERY (A1 ถึงคอลัมน์สุดท้ายของข้อมูล)
+const QUERY_OUTPUT_RANGE = 'B1:I'; // ช่วงข้อมูลที่คาดว่าจะได้จาก QUERY (A1 ถึงคอลัมน์สุดท้ายของข้อมูล)
 
 // Headers ที่คาดหวังจาก Google Sheet (ต้องตรงเป๊ะกับ Headers ในชีทหลักของคุณ)
 const EXPECTED_HEADERS = [
