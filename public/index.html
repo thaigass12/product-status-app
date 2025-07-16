@@ -1,234 +1,192 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เช็คสถานะสินค้า</title>
-  <style>
-    /* CSS พื้นฐานและสไตล์สำหรับการจัดระเบียบ */
-    body {
-      font-family: 'Arial', sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background-color: #f0f2f5;
-      margin: 0;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .container {
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      width: 100%;
-      max-width: 800px;
-      margin-bottom: 20px;
-    }
-    h1 {
-      color: #333;
-      margin-bottom: 25px;
-      font-size: 28px;
-    }
-    input[type="text"] {
-      width: calc(100% - 22px);
-      padding: 12px;
-      margin-bottom: 20px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
-    button {
-      background-color: #007bff;
-      color: white;
-      padding: 12px 25px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 17px;
-      transition: background-color 0.3s ease;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    #statusResult {
-      margin-top: 25px;
-      padding: 20px;
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-      background-color: #f9f9f9;
-      text-align: left;
-      min-height: 60px;
-      color: #555;
-      line-height: 1.6;
-    }
-    .error {
-      color: #d9534f;
-      font-weight: bold;
-      text-align: center;
-    }
-    .success {
-      color: #5cb85c;
-      font-weight: bold;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เช็คสถานะสินค้า</title>
+    <!-- โหลด Tailwind CSS CDN เพื่อการจัดสไตล์ที่รวดเร็วและทันสมัย -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- โหลดฟอนต์ Kanit จาก Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #F3CCCF; 
+        }
 
-    /* สไตล์สำหรับแต่ละรายการ/Card */
-    .item-card {
-        border: 1px solid #cceeff;
-        border-radius: 8px;
-        padding: 15px;
-        margin-bottom: 15px;
-        background-color: #f0f8ff;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        display: flex;
-        flex-wrap: wrap;
-        align-items: flex-start;
-    }
-    .item-card:last-child {
-        margin-bottom: 0;
-    }
-    .item-card img {
-        width: 120px;
-        height: 120px;
-        object-fit: cover;
-        border-radius: 4px;
-        margin-right: 20px;
-        flex-shrink: 0;
-        border: 1px solid #eee;
-    }
-    .item-details {
-        flex-grow: 1;
-        text-align: left;
-    }
-    .item-details p {
-        margin: 5px 0;
-        font-size: 15px;
-        display: flex;
-        align-items: baseline;
-    }
-    .item-details p strong {
-        color: #333;
-        display: inline-block;
-        min-width: 120px;
-        margin-right: 10px;
-        flex-shrink: 0;
-    }
-    .item-details p span {
-        flex-grow: 1;
-    }
+        /* สไตล์สำหรับสีสถานะ (จะถูกเพิ่มด้วย JavaScript) */
+        .status-highlight.กดสินค้าเเล้ว { color: #10B981; font-weight: 600; } /* Emerald Green */
+        .status-highlight.จัดส่งเเล้ว { color: #3B82F6; font-weight: 600; } /* Blue */
+        .status-highlight.ค้างชำระ { color: #EF4444; font-weight: 600; } /* Red */
+        .status-highlight.รอการชำระเงิน { color: #F59E0B; font-weight: 600; } /* Amber */
+        .status-highlight.ยกเลิก { color: #6B7280; font-weight: 600; } /* Gray */
+        .status-highlight.อยู่ระหว่างดำเนินการ { color: #8B5CF6; font-weight: 600; } /* Violet */
+        .status-highlight.จัดเตรียมสินค้า { color: #EC4899; font-weight: 600; } /* Pink */
+        /* เพิ่มสถานะอื่นๆ ตามต้องการ */
 
-    /* สีสถานะตามค่า (คุณสามารถเพิ่ม CSS Class ตามสถานะที่คุณมีใน Sheet) */
-    .status-highlight.ส่งสำเร็จแล้ว { color: #28a745; font-weight: bold; }
-    .status-highlight.กำลังจัดส่ง { color: #007bff; font-weight: bold; }
-    .status-highlight.ค้างชำระ { color: #dc3545; font-weight: bold; }
-    .status-highlight.รอการชำระเงิน { color: #ffc107; font-weight: bold; }
-    .status-highlight.ยกเลิก { color: #6c757d; font-weight: bold; }
+        /* Custom button styles for hover effect */
+        .btn-custom-color {
+            background-color: #C4A18D;
+            transition: background-color 0.3s ease, transform 0.3s ease; /* เพิ่ม transition สำหรับ transform */
+        }
+        .btn-custom-color:hover {
+            background-color: #A88B7B; /* สีที่เข้มขึ้นเล็กน้อยเมื่อโฮเวอร์ */
+            animation: pulse 0.8s infinite; /* เพิ่ม animation เมื่อ hover */
+        }
 
-    /* Responsive adjustments */
-    @media (max-width: 600px) {
-        input[type="text"], button {
-            font-size: 15px;
-            padding: 10px;
+        /* Loading Spinner CSS */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #3B82F6; /* สีน้ำเงินสำหรับ spinner */
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
         }
-        .container {
-            padding: 20px;
+
+        /* Spinner ขนาดเล็กสำหรับในปุ่ม */
+        .spinner-sm {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-left-color: #ffffff; /* สีขาวสำหรับ spinner ในปุ่ม */
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
         }
-        h1 {
-            font-size: 24px;
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-        .item-card {
-            flex-direction: column;
-            align-items: center;
+
+        /* Pulse animation for button */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02); /* ขยายใหญ่ขึ้นเล็กน้อย */
+            }
+            100% {
+                transform: scale(1);
+            }
         }
-        .item-card img {
-            margin-right: 0;
-            margin-bottom: 15px;
-        }
-        .item-details {
-            width: 100%;
-        }
-        .item-details p strong {
-            min-width: 90px;
-        }
-    }
-  </style>
+    </style>
 </head>
-<body>
-  <div class="container">
-    <h1>เช็คสถานะสินค้าของคุณ</h1>
-    <input type="text" id="accountName" placeholder="กรอกชื่อบัญชี">
-    <button onclick="checkAccountStatus()">ค้นหา</button>
-    <div id="statusResult">
-      รายการสถานะจะแสดงที่นี่...
+<body class="flex flex-col justify-center items-center min-h-screen p-4">
+    <div class="container bg-white p-8 rounded-lg shadow-xl text-center w-full max-w-2xl mb-8">
+        <!-- รูปร้านค้าของคุณ - อย่าลืมเปลี่ยน src เป็น URL รูปจริงของคุณ -->
+        <img src="https://media.discordapp.net/attachments/1276255415583379456/1395031274355163248/461663375_122096407844553135_1017319460810488189_n.jpg?ex=6878f79e&is=6877a61e&hm=14144bfd0db9b66aa1753daeb9e2230787abf8a554d8acde2f9cda73058a957e&=&format=webp&width=625&height=625" alt="Shop Logo" class="mx-auto mb-6 rounded-full shadow-md w-32 h-32 object-cover">
+        
+        <!-- หัวข้อหลักของหน้าเว็บ -->
+        <h1 class="text-4xl font-extrabold text-black-500 mb-6">Shikari Store<br>เช็คสถานนะสินค้า</h1>
+        
+        <!-- ข้อความแนะนำการใช้งาน -->
+        <p class="text-lg mb-4" style="color: #F8585A;">
+           
+            <br>หากค้นหาไม่ขึ้นแจ้งทางร้านได้เลยครับ
+        </p>
+
+       
+        <input type="text" id="accountName" placeholder=" Facebook พิมชื่อลงได้เลย / Twitter - X  เติม @ นำหน้า  "
+               class="w-full p-3 mb-5 border border-gray-300 rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
+        
+        <!-- ปุ่มค้นหา -->
+        <button id="searchButton" onclick="checkAccountStatus()"
+                class="text-white py-3 px-6 rounded-md text-xl font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-200 ease-in-out w-full
+                       transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl
+                       btn-custom-color">
+            ค้นหา
+        </button>
+        
+        <!-- พื้นที่แสดงผลสถานะสินค้า -->
+        <div id="statusResult" class="mt-8 p-6 border border-gray-200 rounded-lg bg-gray-50 text-left min-h-[100px] text-gray-700 leading-relaxed">
+            <p class="text-center text-gray-500">รายการสถานะจะแสดงที่นี่...</p>
+        </div>
     </div>
-  </div>
 
-  <script>
-    async function checkAccountStatus() {
-      const accountName = document.getElementById('accountName').value;
-      const statusResultDiv = document.getElementById('statusResult');
-      statusResultDiv.innerHTML = '<p style="text-align:center;">กำลังค้นหา...</p>';
-      statusResultDiv.className = '';
+    <script>
+        async function checkAccountStatus() {
+            const accountName = document.getElementById('accountName').value;
+            const statusResultDiv = document.getElementById('statusResult');
+            const searchButton = document.getElementById('searchButton');
 
-      if (!accountName) {
-        statusResultDiv.innerHTML = '<span class="error">กรุณากรอกชื่อบัญชี</span>';
-        return;
-      }
+            // แสดง Loading Spinner และปิดการใช้งานปุ่ม
+            statusResultDiv.innerHTML = '<p class="text-center text-gray-500"><span class="spinner"></span>กำลังค้นหา...</p>';
+            statusResultDiv.className = 'mt-8 p-6 border border-gray-200 rounded-lg bg-gray-50 text-left min-h-[100px] text-gray-700 leading-relaxed'; // รีเซ็ตคลาส
+            searchButton.disabled = true; // ปิดการใช้งานปุ่ม
+            searchButton.innerHTML = '<span class="spinner-sm"></span> กำลังค้นหา...'; // เปลี่ยนข้อความปุ่ม
+            searchButton.classList.add('flex', 'items-center', 'justify-center'); // จัดให้ spinner อยู่ตรงกลางปุ่ม
 
-      try {
-        // เรียกใช้ Serverless Function ที่ Vercel ของคุณ
-        const response = await fetch('/api/search', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ accountName: accountName }),
-        });
+            if (!accountName) {
+                statusResultDiv.innerHTML = '<span class="text-red-500 font-bold text-center block">กรุณากรอกชื่อบัญชี</span>';
+                statusResultDiv.className = 'mt-8 p-6 border border-red-300 rounded-lg bg-red-50 text-left min-h-[100px] text-gray-700 leading-relaxed';
+                searchButton.disabled = false; // เปิดการใช้งานปุ่ม
+                searchButton.innerHTML = 'ค้นหา'; // คืนข้อความปุ่ม
+                searchButton.classList.remove('flex', 'items-center', 'justify-center');
+                return;
+            }
 
-        const result = await response.json();
+            try {
+                // เรียกใช้ Serverless Function ที่ Vercel ของคุณ
+                const response = await fetch('/api/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ accountName: accountName }),
+                });
 
-        if (response.ok && result.status === 'success' && result.data.length > 0) {
-          let htmlContent = `<p style="text-align: center; font-size: 1.1em; margin-bottom: 20px;"><strong>พบ ${result.data.length} รายการสำหรับชื่อบัญชี "${result.data[0].accountName || accountName}":</strong></p>`;
+                const result = await response.json();
 
-          result.data.forEach(item => {
-            const imageUrl = item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.productName || 'สินค้า'}">` : '';
+                if (response.ok && result.status === 'success' && result.data.length > 0) {
+                    let htmlContent = `<p class="text-center text-lg font-medium text-gray-800 mb-5"><strong>พบ ${result.data.length} รายการสำหรับชื่อบัญชี "${result.data[0].accountName || accountName}":</strong></p>`;
 
-            const price = parseFloat(item.price);
-            const outstanding = parseFloat(item.outstanding);
+                    result.data.forEach(item => {
+                        // ใช้ placeholder image หาก imageUrl ว่างเปล่า หรือเกิด error ในการโหลด
+                        const defaultImageUrl = `https://placehold.co/120x120/E0E0E0/808080?text=No+Image`;
+                        const imageUrl = item.imageUrl && item.imageUrl.trim() !== '' ? item.imageUrl : defaultImageUrl;
 
-            htmlContent += `
-              <div class="item-card">
-                ${imageUrl}
-                <div class="item-details">
-                  <p><strong>ชื่อบัญชี:</strong> <span>${item.accountName || '-'}</span></p>
-                  <p><strong>ชื่อสินค้า:</strong> <span>${item.productName || '-'}</span></p>
-                  <p><strong>ราคาสินค้า:</strong> <span>${!isNaN(price) ? price.toLocaleString('th-TH') + ' บาท' : item.price || '-'}</span></p>
-                  <p><strong>ค้างชำระ:</strong> <span>${!isNaN(outstanding) ? outstanding.toLocaleString('th-TH') + ' บาท' : item.outstanding || '-'}</span></p>
-                  <p><strong>สถานะ:</strong> <span class="status-highlight ${item.status}">${item.status || '-'}</span></p>
-                  <p><strong>กำหนดส่งจากเว็ป:</strong> <span>${item.deliveryDueDate || '-'}</span></p>
-                  <p><strong>หมายเหตุ:</strong> <span>${item.remarks || '-'}</span></p>
-                </div>
-              </div>
-            `;
-          });
-          statusResultDiv.innerHTML = htmlContent;
-          statusResultDiv.className = 'success';
-        } else {
-          statusResultDiv.innerHTML = `<span class="error">${result.message || 'ไม่พบข้อมูลสำหรับชื่อบัญชีนี้'}</span>`;
-          statusResultDiv.className = 'error';
+                        htmlContent += `
+                            <div class="item-card bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 shadow-sm flex flex-col sm:flex-row items-center sm:items-start">
+                                <img src="${imageUrl}" alt="${item.productName || 'สินค้า'}" 
+                                     class="w-24 h-24 object-cover rounded-md mr-0 sm:mr-4 mb-4 sm:mb-0 flex-shrink-0 border border-gray-200"
+                                     onerror="this.onerror=null; this.src='${defaultImageUrl}';">
+                                <div class="item-details flex-grow text-left w-full">
+                                    <p class="mb-1"><strong class="text-gray-600 w-32 inline-block">ชื่อบัญชี:</strong> <span class="text-gray-800">${item.accountName || '-'}</span></p>
+                                    <p class="mb-1"><strong class="text-gray-600 w-32 inline-block">ชื่อสินค้า:</strong> <span class="text-gray-800">${item.productName || '-'}</span></p>
+                                    <p class="mb-1"><strong class="text-gray-600 w-32 inline-block">ราคาสินค้า:</strong> <span class="text-gray-800">${!isNaN(parseFloat(item.price)) ? parseFloat(item.price).toLocaleString('th-TH') + ' บาท' : item.price || '-'}</span></p>
+                                    <p class="mb-1"><strong class="text-gray-600 w-32 inline-block">ค้างชำระ:</strong> <span class="text-gray-800">${!isNaN(parseFloat(item.outstanding)) ? parseFloat(item.outstanding).toLocaleString('th-TH') + ' บาท' : item.outstanding || '-'}</span></p>
+                                    <p class="mb-1"><strong class="text-gray-600 w-32 inline-block">สถานะ:</strong> <span class="status-highlight ${item.status}">${item.status || '-'}</span></p>
+                                    <p class="mb-1"><strong class="text-gray-600 w-32 inline-block">กำหนดส่งจากเว็ป:</strong> <span class="text-gray-800">${item.deliveryDueDate || '-'}</span></p>
+                                    <p class="mb-0"><strong class="text-gray-600 w-32 inline-block">หมายเหตุ:</strong> <span class="text-gray-800">${item.remarks || '-'}</span></p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    statusResultDiv.innerHTML = htmlContent;
+                    statusResultDiv.className = 'mt-8 p-6 border border-green-300 rounded-lg bg-green-50 text-left min-h-[100px] text-gray-700 leading-relaxed';
+                } else {
+                    statusResultDiv.innerHTML = `<span class="text-red-500 font-bold text-center block">${result.message || 'ไม่พบข้อมูลสำหรับชื่อบัญชีนี้'}</span>`;
+                    statusResultDiv.className = 'mt-8 p-6 border border-red-300 rounded-lg bg-red-50 text-left min-h-[100px] text-gray-700 leading-relaxed';
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                statusResultDiv.innerHTML = '<span class="text-red-500 font-bold text-center block">เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่</span>';
+                statusResultDiv.className = 'mt-8 p-6 border border-red-300 rounded-lg bg-red-50 text-left min-h-[100px] text-gray-700 leading-relaxed';
+            } finally {
+                // ซ่อน Loading Spinner และเปิดการใช้งานปุ่มเสมอเมื่อกระบวนการเสร็จสิ้น
+                searchButton.disabled = false;
+                searchButton.innerHTML = 'ค้นหา';
+                searchButton.classList.remove('flex', 'items-center', 'justify-center');
+            }
         }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        statusResultDiv.innerHTML = '<span class="error">เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่</span>';
-        statusResultDiv.className = 'error';
-      }
-    }
-  </script>
+    </script>
 </body>
 </html>
