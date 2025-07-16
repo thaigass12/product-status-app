@@ -161,13 +161,13 @@
                                      class="w-24 h-24 object-cover rounded-md mr-0 sm:mr-4 mb-4 sm:mb-0 flex-shrink-0 border border-gray-200"
                                      onerror="this.onerror=null; this.src='${defaultImageUrl}';">
                                 <div class="item-details flex-grow text-left w-full">
-                                    <p class="mb-1"><strong class="text-gray-600 w-16 sm:w-32 inline-block">ชื่อบัญชี:</strong> <span class="text-gray-800">${item.accountName || '-'}</span></p>
-                                    <p class="mb-1"><strong class="text-gray-600 w-16 sm:w-32 inline-block">ชื่อสินค้า:</strong> <span class="text-gray-800">${item.productName || '-'}</span></p>
-                                    <p class="mb-1"><strong class="text-gray-600 w-16 sm:w-32 inline-block">ราคาสินค้า:</strong> <span class="text-gray-800">${!isNaN(parseFloat(item.price)) ? parseFloat(item.price).toLocaleString('th-TH') + ' บาท' : item.price || '-'}</span></p>
-                                    <p class="mb-1"><strong class="text-gray-600 w-16 sm:w-32 inline-block">ค้างชำระ:</strong> <span class="text-gray-800">${!isNaN(parseFloat(item.outstanding)) ? parseFloat(item.outstanding).toLocaleString('th-TH') + ' บาท' : item.outstanding || '-'}</span></p>
-                                    <p class="mb-1"><strong class="text-gray-600 w-16 sm:w-32 inline-block">สถานะ:</strong> <span class="status-highlight ${item.status}">${item.status || '-'}</span></p>
-                                    <p class="mb-1"><strong class="text-gray-600 w-16 sm:w-32 inline-block">กำหนดส่งจากเว็ป:</strong> <span class="text-gray-800">${item.deliveryDueDate || '-'}</span></p>
-                                    <p class="mb-0"><strong class="text-gray-600 w-16 sm:w-32 inline-block">หมายเหตุ:</strong> <span class="text-gray-800">${item.remarks || '-'}</span></p>
+                                    <p class="mb-1"><strong class="text-gray-600 w-auto sm:w-32 inline-block">ชื่อบัญชี:</strong> <span class="text-gray-800">${item.accountName || '-'}</span></p>
+                                    <p class="mb-1"><strong class="text-gray-600 w-auto sm:w-32 inline-block">ชื่อสินค้า:</strong> <span class="text-gray-800">${item.productName || '-'}</span></p>
+                                    <p class="mb-1"><strong class="text-gray-600 w-auto sm:w-32 inline-block">ราคาสินค้า:</strong> <span class="text-gray-800">${!isNaN(parseFloat(item.price)) ? parseFloat(item.price).toLocaleString('th-TH') + ' บาท' : item.price || '-'}</span></p>
+                                    <p class="mb-1"><strong class="text-gray-600 w-auto sm:w-32 inline-block">ค้างชำระ:</strong> <span class="text-gray-800">${!isNaN(parseFloat(item.outstanding)) ? parseFloat(item.outstanding).toLocaleString('th-TH') + ' บาท' : item.outstanding || '-'}</span></p>
+                                    <p class="mb-1"><strong class="text-gray-600 w-auto sm:w-32 inline-block">สถานะ:</strong> <span class="status-highlight ${item.status}">${item.status || '-'}</span></p>
+                                    <p class="mb-1"><strong class="text-gray-600 w-auto sm:w-32 inline-block">กำหนดส่งจากเว็ป:</strong> <span class="text-gray-800">${item.deliveryDueDate || '-'}</span></p>
+                                    <p class="mb-0"><strong class="text-gray-600 w-auto sm:w-32 inline-block">หมายเหตุ:</strong> <span class="text-gray-800">${item.remarks || '-'}</span></p>
                                 </div>
                             </div>
                         `;
@@ -190,5 +190,8 @@
             }
         }
     </script>
+</body>
+</html>
+
 </body>
 </html>
