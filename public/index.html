@@ -84,7 +84,7 @@
 <body class="flex flex-col justify-center items-center min-h-screen px-2 py-4">
     <div class="container bg-white px-4 py-6 sm:p-8 rounded-lg shadow-xl text-center w-full max-w-2xl mb-8">
         <!-- รูปร้านค้าของคุณ - อย่าลืมเปลี่ยน src เป็น URL รูปจริงของคุณ -->
-        <img src="https://media.discordapp.net/attachments/1276255415583379456/1395031274355163248/461663375_122096407844553135_1017319460810488189_n.jpg?ex=6878f79e&is=6877a61e&hm=14144bfd0db9b66aa1753daeb9e2230787abf8a554d8acde2f9cda73058a957e&=&format=webp&width=625&height=625" alt="Shop Logo" class="mx-auto mb-6 rounded-full shadow-md w-32 h-32 object-cover">
+        <img src="https://media.discordapp.net/attachments/1276255415583379456/1395031274355163248/461663375_122096407844553135_1017319460810488189_n.jpg?ex=6878f79e&is=6877a61e&hm=14144bfd0db9b66aa1753daeb9e2230787abf8a554d8acde2f9cda73058a957e&=&format=webp&width=625&height=625" alt="Shop Logo" class="mx-auto mb-6 rounded-full shadow-md w-40 h-40 object-cover">
         
         <!-- หัวข้อหลักของหน้าเว็บ -->
         <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-6">Shikari Store<br>เช็คสถานนะสินค้า</h1>
@@ -158,16 +158,16 @@
                         htmlContent += `
                             <div class="item-card bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 shadow-sm flex flex-col sm:flex-row items-center sm:items-start">
                                 <img src="${imageUrl}" alt="${item.productName || 'สินค้า'}" 
-                                     class="w-24 h-24 object-cover rounded-md mr-0 sm:mr-4 mb-4 sm:mb-0 flex-shrink-0 border border-gray-200"
+                                     class="w-32 h-32 object-cover rounded-md mr-0 sm:mr-4 mb-4 sm:mb-0 flex-shrink-0 border border-gray-200"
                                      onerror="this.onerror=null; this.src='${defaultImageUrl}';">
                                 <div class="item-details flex-grow text-left w-full">
-                                    <p class="mb-1"><strong class="text-gray-600 w-auto sm:w-32 inline-block">ชื่อบัญชี:</strong> <span class="text-gray-800">${item.accountName || '-'}</span></p>
-                                    <p class="mb-1"><strong class="text-gray-600 w-auto sm:w-32 inline-block">ชื่อสินค้า:</strong> <span class="text-gray-800">${item.productName || '-'}</span></p>
-                                    <p class="mb-1"><strong class="text-gray-600 w-auto sm:w-32 inline-block">ราคาสินค้า:</strong> <span class="text-gray-800">${!isNaN(parseFloat(item.price)) ? parseFloat(item.price).toLocaleString('th-TH') + ' บาท' : item.price || '-'}</span></p>
-                                    <p class="mb-1"><strong class="text-gray-600 w-auto sm:w-32 inline-block">ค้างชำระ:</strong> <span class="text-gray-800">${!isNaN(parseFloat(item.outstanding)) ? parseFloat(item.outstanding).toLocaleString('th-TH') + ' บาท' : item.outstanding || '-'}</span></p>
-                                    <p class="mb-1"><strong class="text-gray-600 w-auto sm:w-32 inline-block">สถานะ:</strong> <span class="status-highlight ${item.status}">${item.status || '-'}</span></p>
-                                    <p class="mb-1"><strong class="text-gray-600 w-auto sm:w-32 inline-block">กำหนดส่งจากเว็ป:</strong> <span class="text-gray-800">${item.deliveryDueDate || '-'}</span></p>
-                                    <p class="mb-0"><strong class="text-gray-600 w-auto sm:w-32 inline-block">หมายเหตุ:</strong> <span class="text-gray-800">${item.remarks || '-'}</span></p>
+                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ชื่อบัญชี:</strong> <span class="text-gray-800 flex-grow">${item.accountName || '-'}</span></p>
+                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ชื่อสินค้า:</strong> <span class="text-gray-800 flex-grow">${item.productName || '-'}</span></p>
+                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ราคาสินค้า:</strong> <span class="text-gray-800 flex-grow">${!isNaN(parseFloat(item.price)) ? parseFloat(item.price).toLocaleString('th-TH') + ' บาท' : item.price || '-'}</span></p>
+                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ค้างชำระ:</strong> <span class="text-gray-800 flex-grow">${!isNaN(parseFloat(item.outstanding)) ? parseFloat(item.outstanding).toLocaleString('th-TH') + ' บาท' : item.outstanding || '-'}</span></p>
+                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">สถานะ:</strong> <span class="status-highlight ${item.status} flex-grow">${item.status || '-'}</span></p>
+                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">กำหนดส่งจากเว็ป:</strong> <span class="text-gray-800 flex-grow">${item.deliveryDueDate || '-'}</span></p>
+                                    <p class="mb-0 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">หมายเหตุ:</strong> <span class="text-gray-800 flex-grow">${item.remarks || '-'}</span></p>
                                 </div>
                             </div>
                         `;
@@ -192,6 +192,7 @@
     </script>
 </body>
 </html>
+
 
 </body>
 </html>
