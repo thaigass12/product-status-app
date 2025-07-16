@@ -9,8 +9,10 @@
     <!-- โหลดฟอนต์ Kanit จาก Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* กำหนดฟอนต์ Kanit ทั่วทั้ง body */
         body {
             font-family: 'Kanit', sans-serif;
+            /* เปลี่ยนพื้นหลังเป็นสีชมพูตามที่ร้องขอ */
             background-color: #F3CCCF; 
         }
 
@@ -80,12 +82,12 @@
     </style>
 </head>
 <body class="flex flex-col justify-center items-center min-h-screen p-4">
-    <div class="container bg-white p-8 rounded-lg shadow-xl text-center w-full max-w-2xl mb-8">
+    <div class="container bg-white p-6 sm:p-8 rounded-lg shadow-xl text-center w-full max-w-2xl mb-8">
         <!-- รูปร้านค้าของคุณ - อย่าลืมเปลี่ยน src เป็น URL รูปจริงของคุณ -->
         <img src="https://media.discordapp.net/attachments/1276255415583379456/1395031274355163248/461663375_122096407844553135_1017319460810488189_n.jpg?ex=6878f79e&is=6877a61e&hm=14144bfd0db9b66aa1753daeb9e2230787abf8a554d8acde2f9cda73058a957e&=&format=webp&width=625&height=625" alt="Shop Logo" class="mx-auto mb-6 rounded-full shadow-md w-32 h-32 object-cover">
         
         <!-- หัวข้อหลักของหน้าเว็บ -->
-        <h1 class="text-4xl font-extrabold text-black-500 mb-6">Shikari Store<br>เช็คสถานนะสินค้า</h1>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-6">Shikari Store<br>เช็คสถานนะสินค้า</h1>
         
         <!-- ข้อความแนะนำการใช้งาน -->
         <p class="text-lg mb-4" style="color: #F8585A;">
@@ -94,7 +96,7 @@
         </p>
 
        
-        <input type="text" id="accountName" placeholder=" Facebook พิมชื่อลงได้เลย / Twitter - X  เติม @ นำหน้า  "
+        <input type="text" id="accountName" placeholder=" [ ใส่ชื่อ Facebook หรือ @Twitter ]  "
                class="w-full p-3 mb-5 border border-gray-300 rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
         
         <!-- ปุ่มค้นหา -->
@@ -107,7 +109,7 @@
         
         <!-- พื้นที่แสดงผลสถานะสินค้า -->
         <div id="statusResult" class="mt-8 p-6 border border-gray-200 rounded-lg bg-gray-50 text-left min-h-[100px] text-gray-700 leading-relaxed">
-            <p class="text-center text-gray-500">รายการสถานะจะแสดงที่นี่...</p>
+            <p class="text-center text-gray-500">กรุณากรอกชื่อบัญชีเพื่อตรวจสอบสถานะสินค้า</p>
         </div>
     </div>
 
@@ -190,3 +192,4 @@
     </script>
 </body>
 </html>
+
