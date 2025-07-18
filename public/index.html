@@ -8,6 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- โหลดฟอนต์ Kanit จาก Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Favicon (ไอคอนที่แสดงบนแท็บเบราว์เซอร์) -->
+    <link rel="icon" href="https://placehold.co/32x32/F3CCCF/881337?text=S" type="image/png">
     <style>
         /* กำหนดฟอนต์ Kanit ทั่วทั้ง body */
         body {
@@ -84,7 +86,7 @@
 <body class="flex flex-col justify-center items-center min-h-screen px-2 py-4">
     <div class="container bg-white px-4 py-6 sm:p-8 rounded-lg shadow-xl text-center w-full max-w-2xl mb-8">
         <!-- รูปร้านค้าของคุณ - อย่าลืมเปลี่ยน src เป็น URL รูปจริงของคุณ -->
-        <img src="https://res.cloudinary.com/dkptvhj2y/image/upload/v1752871142/Shikari_Store_txhbkv.jpg">
+        <img src="https://placehold.co/128x128/F3CCCF/881337?text=Shop+Logo" alt="Shop Logo" class="mx-auto mb-6 rounded-full shadow-md w-32 h-32 object-cover">
         
         <!-- หัวข้อหลักของหน้าเว็บ -->
         <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-6">Shikari Store<br>เช็คสถานนะสินค้า</h1>
@@ -152,13 +154,13 @@
 
                     result.data.forEach(item => {
                         // ใช้ placeholder image หาก imageUrl ว่างเปล่า หรือเกิด error ในการโหลด
-                        const defaultImageUrl = `https://placehold.co/160x160/E0E0E0/808080?text=No+Image`; // อัปเดตขนาด placeholder
+                        const defaultImageUrl = `https://placehold.co/128x128/E0E0E0/808080?text=No+Image`; // อัปเดตขนาด placeholder
                         const imageUrl = item.imageUrl && item.imageUrl.trim() !== '' ? item.imageUrl : defaultImageUrl;
 
                         htmlContent += `
                             <div class="item-card bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 shadow-sm flex flex-col sm:flex-row items-center sm:items-start">
                                 <img src="${imageUrl}" alt="${item.productName || 'สินค้า'}" 
-                                     class="w-40 h-40 md:w-56 md:h-56 object-cover rounded-md mr-0 sm:mr-4 mb-4 sm:mb-0 flex-shrink-0 border border-gray-200"
+                                     class="w-32 h-32 md:w-48 md:h-48 object-cover rounded-md mr-0 sm:mr-4 mb-4 sm:mb-0 flex-shrink-0 border border-gray-200"
                                      onerror="this.onerror=null; this.src='${defaultImageUrl}';">
                                 <div class="item-details flex-grow text-left w-full">
                                     <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ชื่อบัญชี:</strong> <span class="text-gray-800 flex-grow">${item.accountName || '-'}</span></p>
@@ -192,8 +194,6 @@
     </script>
 </body>
 </html>
-
-
 
 
 
