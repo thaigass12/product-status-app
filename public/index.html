@@ -182,7 +182,7 @@
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
-                statusResultDiv.innerHTML = '<span class="text-red-500 font-bold text-center block">เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่</span>';
+                statusResultDiv.innerHTML = '<span class="text-red-500 font-bold text-center block">ไม่พบข้อมูลสำหรับชื่อบัญชีนี้กรุณาติดต่อทางร้าน</span>';
                 statusResultDiv.className = 'mt-8 p-6 border border-red-300 rounded-lg bg-red-50 text-left min-h-[100px] text-gray-700 leading-relaxed';
             } finally {
                 // ซ่อน Loading Spinner และเปิดการใช้งานปุ่มเสมอเมื่อกระบวนการเสร็จสิ้น
