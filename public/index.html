@@ -150,7 +150,7 @@
                 const result = await response.json();
 
                 if (response.ok && result.status === 'success' && result.data.length > 0) {
-                    let htmlContent = `<p class="text-center text-lg font-medium text-gray-800 mb-5"><strong>พบรายการ ${result.data.length}ออเดอร์</strong></p>`;
+                    let htmlContent = `<p class="text-center text-lg font-medium text-gray-800 mb-5"><strong>พบ ${result.data.length} ออเดอร์</strong></p>`;
 
                     result.data.forEach(item => {
                         // ใช้ placeholder image หาก imageUrl ว่างเปล่า หรือเกิด error ในการโหลด
