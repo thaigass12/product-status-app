@@ -21,8 +21,8 @@
         /* สไตล์สำหรับสีสถานะ (จะถูกเพิ่มด้วย JavaScript) */
         .status-highlight.กดสินค้าเเล้ว { color: #10B981; font-weight: 600; } /* Emerald Green */
         .status-highlight.จัดส่งเเล้ว { color: #3B82F6; font-weight: 600; } /* Blue */
-        .status-highlight.ค้างชำระ { color: #EF4444; font-weight: 600; } /* Red */
-        .status-highlight.รอการชำระเงิน { color: #F59E0B; font-weight: 600; } /* Amber */
+        .status-highlight.ติดต่อไม่ได้ { color: #EF4444; font-weight: 600; } /* Red */
+        .status-highlight.ถึงไทยเเล้ว { color: #F59E0B; font-weight: 600; } /* Amber */
         .status-highlight.ยกเลิก { color: #6B7280; font-weight: 600; } /* Gray */
         .status-highlight.อยู่ระหว่างดำเนินการ { color: #8B5CF6; font-weight: 600; } /* Violet */
         .status-highlight.จัดเตรียมสินค้า { color: #EC4899; font-weight: 600; } /* Pink */
@@ -86,7 +86,7 @@
 <body class="flex flex-col justify-center items-center min-h-screen px-2 py-4">
     <div class="container bg-white px-4 py-6 sm:p-8 rounded-lg shadow-xl text-center w-full max-w-2xl mb-8">
         <!-- รูปร้านค้าของคุณ - อย่าลืมเปลี่ยน src เป็น URL รูปจริงของคุณ -->
-        <img src="https://res.cloudinary.com/dkptvhj2y/image/upload/v1752872731/token_1_syy4s0.png" alt="Shop Logo" class="mx-auto mb-6 rounded-full shadow-md w-20 h-20 object-cover">
+        <img src="https://res.cloudinary.com/dkptvhj2y/image/upload/v1752872731/token_1_syy4s0.png" alt="Shop Logo" class="mx-auto mb-6 rounded-full shadow-md w-45 h-45 object-cover">
         
         <!-- หัวข้อหลักของหน้าเว็บ -->
         <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-6">Shikari Store<br>เช็คสถานนะสินค้า</h1>
@@ -94,7 +94,7 @@
         <!-- ข้อความแนะนำการใช้งาน -->
         <p class="text-lg mb-4" style="color: #F8585A;">
            
-            <br>ถ้าเปลี่ยนชื่อแอคกรุณาแจ้งทางร้าน
+            <br>ถ้าเปลี่ยนชื่อAccountกรุณาแจ้งทางร้าน
         </p>
 
        
@@ -150,46 +150,30 @@
                 const result = await response.json();
 
                 if (response.ok && result.status === 'success' && result.data.length > 0) {
-                    // จัดกลุ่มข้อมูลตามชื่อบัญชี
-                    const groupedData = result.data.reduce((acc, item) => {
-                        const name = item.accountName || 'ไม่ระบุชื่อบัญชี';
-                        if (!acc[name]) {
-                            acc[name] = [];
-                        }
-                        acc[name].push(item);
-                        return acc;
-                    }, {});
+                    let htmlContent = `<p class="text-center text-lg font-medium text-gray-800 mb-5"><strong>พบ ${result.data.length} ออเดอร์</strong></p>`;
 
-                    let htmlContent = '';
-                    for (const name in groupedData) {
+                    result.data.forEach(item => {
+                        // ใช้ placeholder image หาก imageUrl ว่างเปล่า หรือเกิด error ในการโหลด
+                        const defaultImageUrl = `https://placehold.co/128x128/E0E0E0/808080?text=No+Image`; // อัปเดตขนาด placeholder
+                        const imageUrl = item.imageUrl && item.imageUrl.trim() !== '' ? item.imageUrl : defaultImageUrl;
+
                         htmlContent += `
-                            <div class="customer-group bg-white border border-gray-200 rounded-lg p-4 mb-6 shadow-md">
-                                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">ลูกค้า: ${name}</h3>
-                        `;
-                        groupedData[name].forEach((item, index) => {
-                            // ใช้ placeholder image หาก imageUrl ว่างเปล่า หรือเกิด error ในการโหลด
-                            const defaultImageUrl = `https://placehold.co/128x128/E0E0E0/808080?text=No+Image`; 
-                            const imageUrl = item.imageUrl && item.imageUrl.trim() !== '' ? item.imageUrl : defaultImageUrl;
-
-                            htmlContent += `
-                                <div class="item-card bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 shadow-sm flex flex-col sm:flex-row items-center sm:items-start">
-                                    <img src="${imageUrl}" alt="${item.productName || 'สินค้า'}" 
-                                         class="w-32 h-32 md:w-48 md:h-48 object-cover rounded-md mr-0 sm:mr-4 mb-4 sm:mb-0 flex-shrink-0 border border-gray-200"
-                                         onerror="this.onerror=null; this.src='${defaultImageUrl}';">
-                                    <div class="item-details flex-grow text-left w-full">
-                                        <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ชื่อบัญชี:</strong> <span class="text-gray-800 flex-grow">${item.accountName || '-'}</span></p>
-                                        <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ชื่อสินค้า:</strong> <span class="text-gray-800 flex-grow">${item.productName || '-'}</span></p>
-                                        <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ราคาสินค้า:</strong> <span class="text-gray-800 flex-grow">${!isNaN(parseFloat(item.price)) ? parseFloat(item.price).toLocaleString('th-TH') + ' บาท' : item.price || '-'}</span></p>
-                                        <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ค้างชำระ:</strong> <span class="text-gray-800 flex-grow">${!isNaN(parseFloat(item.outstanding)) ? parseFloat(item.outstanding).toLocaleString('th-TH') + ' บาท' : item.outstanding || '-'}</span></p>
-                                        <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">สถานะ:</strong> <span class="status-highlight ${item.status} flex-grow">${item.status || '-'}</span></p>
-                                        <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">กำหนดส่งจากเว็ป:</strong> <span class="text-gray-800 flex-grow">${item.deliveryDueDate || '-'}</span></p>
-                                        <p class="mb-0 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">หมายเหตุ:</strong> <span class="text-gray-800 flex-grow">${item.remarks || '-'}</span></p>
-                                    </div>
+                            <div class="item-card bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 shadow-sm flex flex-col sm:flex-row items-center sm:items-start">
+                                <img src="${imageUrl}" alt="${item.productName || 'สินค้า'}" 
+                                     class="w-32 h-32 md:w-48 md:h-48 object-cover rounded-md mr-0 sm:mr-4 mb-4 sm:mb-0 flex-shrink-0 border border-gray-200"
+                                     onerror="this.onerror=null; this.src='${defaultImageUrl}';">
+                                <div class="item-details flex-grow text-left w-full">
+                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ชื่อบัญชี:</strong> <span class="text-gray-800 flex-grow">${item.accountName || '-'}</span></p>
+                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ชื่อสินค้า:</strong> <span class="text-gray-800 flex-grow">${item.productName || '-'}</span></p>
+                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ราคาสินค้า:</strong> <span class="text-gray-800 flex-grow">${!isNaN(parseFloat(item.price)) ? parseFloat(item.price).toLocaleString('th-TH') + ' บาท' : item.price || '-'}</span></p>
+                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ค้างชำระ:</strong> <span class="text-gray-800 flex-grow">${!isNaN(parseFloat(item.outstanding)) ? parseFloat(item.outstanding).toLocaleString('th-TH') + ' บาท' : item.outstanding || '-'}</span></p>
+                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">สถานะ:</strong> <span class="status-highlight ${item.status} flex-grow">${item.status || '-'}</span></p>
+                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">กำหนดส่งจากเว็ป:</strong> <span class="text-gray-800 flex-grow">${item.deliveryDueDate || '-'}</span></p>
+                                    <p class="mb-0 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">หมายเหตุ:</strong> <span class="text-gray-800 flex-grow">${item.remarks || '-'}</span></p>
                                 </div>
-                            `;
-                        });
-                        htmlContent += `</div>`; // ปิด customer-group div
-                    }
+                            </div>
+                        `;
+                    });
                     statusResultDiv.innerHTML = htmlContent;
                     statusResultDiv.className = 'mt-8 p-6 border border-green-300 rounded-lg bg-green-50 text-left min-h-[100px] text-gray-700 leading-relaxed';
                 } else {
