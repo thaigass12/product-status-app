@@ -1,5 +1,3 @@
-// api/search.js
-
 const { google } = require('googleapis');
 
 const SPREADSHEET_ID = process.env.GOOGLE_SHEET_ID; 
@@ -89,8 +87,9 @@ module.exports = async (req, res) => {
                         accountName: String(row[headerMap['ชื่อบัญชี']] || '').trim(),
                         imageUrl: String(row[headerMap['รูปสินค้า']] || '').trim(), 
                         productName: String(row[headerMap['ชื่อสินค้า']] || '').trim(),
-                        price: String(row[headerMap['ราคาสินค้า']] || '').trim(),
-                        outstanding: String(row[headerMap['ค้างชำระ']] || '').trim(), 
+                        // ใช้ parseFloat เพื่อแปลง string ที่ได้จาก Google Sheets เป็นตัวเลข
+                        price: parseFloat(String(row[headerMap['ราคาสินค้า']] || '0').replace(/,/g, '')),
+                        outstanding: parseFloat(String(row[headerMap['ค้างชำระ']] || '0').replace(/,/g, '')),
                         status: String(row[headerMap['สถานะ']] || '').trim(),
                         deliveryDueDate: String(row[headerMap['กำหนดส่งจากเว็ป']] || '').trim(),
                         remarks: String(row[headerMap['หมายเหตุ']] || '').trim()
@@ -110,3 +109,4 @@ module.exports = async (req, res) => {
         return res.status(500).json({ error: 'Internal Server Error', message: e.message || 'เกิดข้อผิดพลาดในการดึงข้อมูล' });
     }
 };
+
