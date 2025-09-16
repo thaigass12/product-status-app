@@ -93,19 +93,19 @@
         
         <!-- ข้อความแนะนำการใช้งาน -->
         <p class="text-lg mb-4" style="color: #F8585A;">
-           
+            
             <br>ถ้าเปลี่ยนชื่อAccountกรุณาแจ้งทางร้าน
         </p>
 
-       
+        
         <input type="text" id="accountName" placeholder=" [ ใส่ชื่อ Facebook หรือ @Twitter ]  "
                class="w-full p-3 mb-5 border border-gray-300 rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
         
         <!-- ปุ่มค้นหา -->
         <button id="searchButton" onclick="checkAccountStatus()"
                 class="text-white py-3 px-6 rounded-md text-xl font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-200 ease-in-out w-full
-                       transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl
-                       btn-custom-color">
+                        transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl
+                        btn-custom-color">
             ค้นหา
         </button>
         
@@ -116,6 +116,29 @@
     </div>
 
     <script>
+        /**
+         * Helper function to get the value from a Notion property,
+         * handling different property types.
+         */
+        function getPropertyValue(property) {
+            if (!property) return '-';
+
+            switch (property.type) {
+                case 'title':
+                    return property.title[0]?.plain_text || '-';
+                case 'rich_text':
+                    return property.rich_text[0]?.plain_text || '-';
+                case 'number':
+                    // Format number with commas for better readability
+                    return property.number != null ? property.number.toLocaleString('th-TH') : '-';
+                case 'date':
+                    return property.date?.start || '-';
+                // Add more cases for other property types if needed
+                default:
+                    return '-';
+            }
+        }
+
         async function checkAccountStatus() {
             const accountName = document.getElementById('accountName').value;
             const statusResultDiv = document.getElementById('statusResult');
@@ -160,13 +183,13 @@
                         htmlContent += `
                             <div class="item-card bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 shadow-sm flex flex-col sm:flex-row items-center sm:items-start">
                                 <img src="${imageUrl}" alt="${item.productName || 'สินค้า'}" 
-                                     class="w-32 h-32 md:w-48 md:h-48 object-cover rounded-md mr-0 sm:mr-4 mb-4 sm:mb-0 flex-shrink-0 border border-gray-200"
-                                     onerror="this.onerror=null; this.src='${defaultImageUrl}';">
+                                    class="w-32 h-32 md:w-48 md:h-48 object-cover rounded-md mr-0 sm:mr-4 mb-4 sm:mb-0 flex-shrink-0 border border-gray-200"
+                                    onerror="this.onerror=null; this.src='${defaultImageUrl}';">
                                 <div class="item-details flex-grow text-left w-full">
                                     <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ชื่อบัญชี:</strong> <span class="text-gray-800 flex-grow">${item.accountName || '-'}</span></p>
                                     <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ชื่อสินค้า:</strong> <span class="text-gray-800 flex-grow">${item.productName || '-'}</span></p>
-                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ราคาสินค้า:</strong> <span class="text-gray-800 flex-grow">${!isNaN(parseFloat(item.price)) ? parseFloat(item.price).toLocaleString('th-TH') + ' บาท' : item.price || '-'}</span></p>
-                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ค้างชำระ:</strong> <span class="text-gray-800 flex-grow">${!isNaN(parseFloat(item.outstanding)) ? parseFloat(item.outstanding).toLocaleString('th-TH') + ' บาท' : item.outstanding || '-'}</span></p>
+                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ราคาสินค้า:</strong> <span class="text-gray-800 flex-grow">${item.price != null ? getPropertyValue({ type: 'number', number: item.price }) : '-'} บาท</span></p>
+                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ค้างชำระ:</strong> <span class="text-red-600 font-semibold flex-grow">${item.outstanding != null ? getPropertyValue({ type: 'number', number: item.outstanding }) : '-'} บาท</span></p>
                                     <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">สถานะ:</strong> <span class="status-highlight ${item.status} flex-grow">${item.status || '-'}</span></p>
                                     <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">กำหนดส่งจากเว็ป:</strong> <span class="text-gray-800 flex-grow">${item.deliveryDueDate || '-'}</span></p>
                                     <p class="mb-0 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">หมายเหตุ:</strong> <span class="text-gray-800 flex-grow">${item.remarks || '-'}</span></p>
@@ -194,3 +217,5 @@
     </script>
 </body>
 </html>
+
+
