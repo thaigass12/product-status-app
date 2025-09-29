@@ -19,10 +19,10 @@
         }
 
         /* สไตล์สำหรับสีสถานะ (จะถูกเพิ่มด้วย JavaScript) */
-        .status-highlight.กดสินค้าเเล้ว { color: #10B981; font-weight: 600; } /* Emerald Green */
-        .status-highlight.จัดส่งเเล้ว { color: #3B82F6; font-weight: 600; } /* Blue */
+        .status-highlight.กดสินค้าแล้ว { color: #10B981; font-weight: 600; } /* Emerald Green */
+        .status-highlight.จัดส่งแล้ว { color: #3B82F6; font-weight: 600; } /* Blue */
         .status-highlight.ติดต่อไม่ได้ { color: #EF4444; font-weight: 600; } /* Red */
-        .status-highlight.ถึงไทยเเล้ว { color: #F59E0B; font-weight: 600; } /* Amber */
+        .status-highlight.ถึงไทยแล้ว { color: #f5b879; font-weight: 600; } /* Amber */
         .status-highlight.ยกเลิก { color: #6B7280; font-weight: 600; } /* Gray */
         .status-highlight.อยู่ระหว่างดำเนินการ { color: #8B5CF6; font-weight: 600; } /* Violet */
         .status-highlight.จัดเตรียมสินค้า { color: #EC4899; font-weight: 600; } /* Pink */
@@ -191,7 +191,7 @@
                                     <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ราคาสินค้า:</strong> <span class="text-gray-800 flex-grow">${item.price != null ? getPropertyValue({ type: 'number', number: item.price }) : '-'} บาท</span></p>
                                     <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">ค้างชำระ:</strong> <span class="text-red-600 font-semibold flex-grow">${item.outstanding != null ? getPropertyValue({ type: 'number', number: item.outstanding }) : '-'} บาท</span></p>
                                     <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">สถานะ:</strong> <span class="status-highlight ${item.status} flex-grow">${item.status || '-'}</span></p>
-                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">กำหนดส่งจากเว็ป:</strong> <span class="text-gray-800 flex-grow">${item.deliveryDueDate || '-'}</span></p>
+                                    <p class="mb-1 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">กำหนดส่งจากเว็ป:</strong> <span class="text-blue-800 flex-grow">${item.deliveryDueDate || '-'}</span></p>
                                     <p class="mb-0 flex items-baseline"><strong class="text-gray-600 flex-shrink-0 mr-2">หมายเหตุ:</strong> <span class="text-gray-800 flex-grow">${item.remarks || '-'}</span></p>
                                 </div>
                             </div>
@@ -217,5 +217,6 @@
     </script>
 </body>
 </html>
+
 
 
